@@ -1,6 +1,6 @@
-• System Workflow (How it Works)
+• **System Workflow**
 
-• Categories: First, you create product categories (like "Electronics", "Books").
+• **Categories:** First, you create product categories (like "Electronics", "Books").
 
 • Products: Then, products are created under those categories. When a product is created, an inventory entry is automatically added.
 
