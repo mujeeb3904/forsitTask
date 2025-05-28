@@ -1,92 +1,104 @@
-**System Workflow**
+** Tech Stack Overview**
 
-**Categories:**  First, you create product categories (like "Electronics", "Books").
+**Runtime & Framework:** Node.js with Express.js
 
-**Products:** Then, products are created under those categories. When a product is created, an inventory entry is automatically added.
+**Database:** MongoDB (NoSQL) using Mongoose ODM
 
-**Inventory:** Inventory shows how much stock is available. When products are sold or manually updated, the inventory changes.
+**Storage:** AWS S3 for product image upload & management
 
-**Sales:** When a sale is made, it reduces the product quantity in inventory automatically.
+**Environment:** dotenv for configuration, nodemon for dev server
 
-**Revenue:** Revenue is calculated based on completed sales and is used in reports.
+**API Format:** RESTful JSON
 
-**Project Structure**
+**Testing Tool:** Postman
 
-The project uses the MVC pattern:
+**System Flow & Architecture**
 
-**1. Models** – Define your database structure (MongoDB using Mongoose).
+This API supports an admin panel for managing an e-commerce backend. It handles:
 
-**Controllers** – Handle logic and data processing.
+**Categories:** Logical grouping of products.
 
-**Routes** – Define the API URLs that users or frontend apps can call.
+**Products:** Includes price, description, image, and stock.
 
-**Models**
-These define what data is stored in MongoDB:
+**Inventory:** Tracks stock levels and logs changes.
 
-**Category:** Product categories
+**Sales:** Captures sale events, updates inventory.
 
-**Product:** Product details (price, description, etc.)
+**Revenue:** Analyzes and aggregates income data.
 
-**Inventory:** Current stock of each product
+The project uses the MVC Pattern for structure:
 
-**InventoryHistory:** Keeps record of inventory changes
+**Model:** Database schemas and rules.
 
-**Sale:** Stores each sale (items sold, total amount, customer, etc.)
+**Controller:** Business logic for requests.
 
-**2. Controllers**
-   They contain logic to:
+**Routes:** API endpoints linked to controller functions.
 
-• Create/get/update/delete categories and products
+Folder Structure Overview
 
-• Automatically create inventory when a product is added
+/models – MongoDB schemas (Category, Product, Inventory, InventoryHistory, Sale)
 
-• Update inventory during a sale
+/controllers – Functions to manage CRUD, inventory sync, and revenue analytics
 
-• Track inventory changes in history
+/routes – Endpoint definitions per module
 
-• Calculate revenue (total, by category, by platform, daily)
+/config – Database and AWS S3 configurations
 
-**3. Routes**
+index.js – Entry point: env setup, DB connect, route mount, server init
 
-These define your API endpoints like:
 
-/categories/createCategory
 
-/products/createProduct
+**Route Descriptions & Purpose**
 
-/sales/productSold
+**Category Routes**
 
-/revenue/revenueByCategory
+POST /categories/createCategory – Create a new product category
 
-Each route calls the related controller function.
+GET /categories/AllCategories – Fetch all existing categories
 
-**4. Entry Point (index.js)**
-   
-   This is the main file and entery point for the app:
-   Loads environment variables
-   Connects to MongoDB
-   Sets up Express server
-   Mounts routes
-   Starts listening on the port
+PUT /categories/updateCategory/:id – Update a category by ID
 
-**6. Config**
-   database.js: Connects to MongoDB
+DELETE /categories/deleteCategory/:id – Remove a category by ID
 
-s3.js: Upload/delete files from AWS S3 (used for product images)
+**Product Routes**
 
-**How to Run the Project**
-Clone the repository
-`git clone https://github.com/mujeeb3904/forsitTask.git`
-Install dependencies
-`npm install`
+POST /products/createProduct – Add a new product to a category (auto-generates inventory)
 
-**Add .env file with this:**
-• MONGO_URI=your_mongodb_uri
-• PORT=5000
-• REGION_NAME=your_aws_region
-• ACCESS_KEY_ID=your_aws_access_key
-• SECRET_ACCESS_KEY=your_aws_secret
-• BUCKET_NAME=your_s3_bucket
+GET /products/AllProducts – List all products
 
-**Summary**
-This project handles categories, products, inventory, sales, and revenue tracking using Node.js, Express, MongoDB (Mongoose), and AWS S3. It follows an MVC structure for clean code separation and scalability.
+GET /products/product/:id – Fetch product details by ID
+
+PUT /products/updateProduct/:id – Update a product’s info by ID
+
+DELETE /products/deleteProduct/:id – Delete a product and associated inventory
+
+**Inventory Routes**
+
+GET /inventory/getInventory – List current inventory across all products
+
+PUT /inventory/updateInventoryList/:id – Manually update inventory quantity for a product
+
+GET /inventory/lowStockItems – Identify products running low on stock
+
+GET /inventory/getInventoryHistory/:id – Show historical inventory changes for a product
+
+**Sales & Revenue Routes**
+
+POST /sales/productSold – Register a sale and reduce inventory accordingly
+
+GET /sales/getSales – View all sales transactions
+
+GET /sales/saleByDetails/:id – View detailed info for a specific sale
+
+GET /revenue/revenueSummary – Aggregate total revenue
+
+GET /revenue/revenueByCategory – Revenue breakdown by product category
+
+GET /revenue/revenueByPlatform – Revenue split by sales platform (e.g., online, retail)
+
+GET /revenue/DailyRevenue – Revenue tracked per day
+
+
+**Conclusion**
+
+This backend system offers robust capabilities for managing e-commerce workflows through a clean RESTful API. It uses a modular MVC approach, automates inventory handling, provides sale-based analytics, and integrates with AWS for image storage. Built with scalability and developer clarity in mind.
