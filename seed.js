@@ -96,7 +96,6 @@ const seedData = async () => {
         )}`,
       });
     }
-
     const createdProducts = await Product.insertMany(sampleProducts);
 
     const inventoryEntries = createdProducts.map((product) => ({
@@ -131,10 +130,10 @@ const seedData = async () => {
       });
     }
 
-    console.log("✅ Seed data inserted successfully.");
+    console.log("Seed data inserted successfully.");
     process.exit();
   } catch (error) {
-    console.error("❌ Error seeding data:", error);
+    console.error("Error seeding data:", error);
     process.exit(1);
   }
 };

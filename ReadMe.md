@@ -1,4 +1,4 @@
-** Tech Stack Overview**
+**Tech Stack Overview**
 
 **Runtime & Framework:** Node.js with Express.js
 
@@ -7,6 +7,8 @@
 **Storage:** AWS S3 for product image upload & management
 
 **Environment:** dotenv for configuration, nodemon for dev server
+
+**Seed**: adding seed data for testing
 
 **API Format:** RESTful JSON
 
@@ -45,8 +47,6 @@ Folder Structure Overview
 /config – Database and AWS S3 configurations
 
 index.js – Entry point: env setup, DB connect, route mount, server init
-
-
 
 **Route Descriptions & Purpose**
 
@@ -97,7 +97,6 @@ GET /revenue/revenueByCategory – Revenue breakdown by product category
 GET /revenue/revenueByPlatform – Revenue split by sales platform (e.g., online, retail)
 
 GET /revenue/DailyRevenue – Revenue tracked per day
-
 
 **Conclusion**
 
