@@ -81,60 +81,60 @@ const seedData = async () => {
     const generateSku = (productName) =>
       `SKU-${productName.toUpperCase().replace(/\s+/g, "-")}-${Date.now()}`;
 
-    const sampleProducts = [
-      {
-        name: "Smartphone",
-        price: 699,
-        description: "Latest Android phone",
-        category: categories["Electronics"],
-        sku: generateSku("Smartphone"),
-        imageUrl: "https://dummyimage.com/phone.jpg",
-      },
-      {
-        name: "Novel Book",
-        price: 19,
-        description: "Best-selling fiction book",
-        category: categories["Books"],
-        sku: generateSku("Novel Book"),
-        imageUrl: "https://dummyimage.com/book.jpg",
-      },
-      {
-        name: "Gaming Laptop",
-        price: 1499,
-        description: "High-performance laptop for gaming",
-        category: categories["Laptop"],
-        sku: generateSku("Gaming Laptop"),
-        imageUrl: "https://dummyimage.com/laptop.jpg",
-      },
-    ];
+    const sampleProducts = [];
+    for (let i = 1; i <= 20; i++) {
+      const name = `Product ${i}`;
+      const categoryName = categoryNames[i % categoryNames.length];
+      sampleProducts.push({
+        name,
+        price: Math.floor(Math.random() * 500) + 50,
+        description: `Description for ${name}`,
+        category: categories[categoryName],
+        sku: generateSku(name),
+        imageUrl: `https://dummyimage.com/600x400/000/fff&text=${encodeURIComponent(
+          name
+        )}`,
+      });
+    }
 
     const createdProducts = await Product.insertMany(sampleProducts);
 
     const inventoryEntries = createdProducts.map((product) => ({
       product: product._id,
-      quantity: 100,
+      quantity: Math.floor(Math.random() * 100) + 10,
     }));
 
     await Inventory.insertMany(inventoryEntries);
 
-    await Sale.create({
-      items: [
-        {
-          product: createdProducts[0]._id,
-          quantity: 1,
-          price: createdProducts[0].price,
-        },
-      ],
-      totalAmount: createdProducts[0].price,
-      customer: "John Doe",
-      platform: "Walmart",
-      date: new Date(),
-    });
+    for (let i = 0; i < 10; i++) {
+      const product = createdProducts[i];
+      const quantity = Math.ceil(Math.random() * 3);
 
-    console.log(" Seed data inserted successfully.");
+      // Updating inventory
+      await Inventory.updateOne(
+        { product: product._id },
+        { $inc: { quantity: -quantity } }
+      );
+
+      await Sale.create({
+        items: [
+          {
+            product: product._id,
+            quantity,
+            price: product.price,
+          },
+        ],
+        totalAmount: quantity * product.price,
+        customer: `Customer ${i + 1}`,
+        platform: i % 2 === 0 ? "Amazon" : "Walmart",
+        date: new Date(),
+      });
+    }
+
+    console.log("✅ Seed data inserted successfully.");
     process.exit();
   } catch (error) {
-    console.error(" Error seeding data:", error);
+    console.error("❌ Error seeding data:", error);
     process.exit(1);
   }
 };
